@@ -3,19 +3,30 @@
  * @email   307253927@qq.com
  */
 'use strict';
-import koa from 'koa';
-import body from 'koa-body';
-import router from 'koa-router';
+import Koa from 'koa';
 import serve from 'koa-static';
+import jwt from 'koa-jwt';
 import path from 'path';
-import {config, connection} from './utils';
+import {config, mysqlMiddleware, log4js, secretKey} from './utils';
+import router from './routes';
 
+const log = log4js.getLogger('app')
 
+const app = new Koa()
 
-connection.connect()
-connection.query('select name from test', function (error, results, fields) {
-  if (error) throw error;
-  console.log('The solution is: ', results[0], fields);
-});
+app
+  .use(log4js.koaLogger(log4js.getLogger("http"), {level: 'auto'}))
+  .use(mysqlMiddleware)
+  .use(serve(path.resolve(__dirname, './assets')))
+  .use(jwt({
+    secret: secretKey,
+    getToken(ctx) {
+      return ctx.header.token || null
+    }
+  }).unless({path: [/^\/unauth/]}))
+  .use(router.routes())
+  .use(router.allowedMethods())
+  .listen(config.port)
 
-connection.end();
+log.info('app is run at:', config.port)
+

@@ -1,6 +1,22 @@
 name: markingSystem
+port: 9000
+
+log4js:
+  appenders:
+    #name of appenders
+    stdout:
+      type: stdout
+  categories:
+    default:
+      appenders: [stdout]
+      level: debug
+
 mysql:
-  host: '192.168.5.23',
-  user: 'root',
-  password: '123456',
-  database: 'markingsystem'
+  host: "192.168.5.23"
+  user: root
+  password: "123456"
+  database: markingsystem
+
+#jwt secret key  二选一
+#secretKeyPath: /path/to/public.pub
+secretKey: "marking system jwt secret_key"
