@@ -9,12 +9,14 @@ const CleanWebpackPlugin        = require('clean-webpack-plugin');
 const ProgressPlugin            = require('progress-bar-webpack-plugin');
 const DefinePlugin              = require('webpack/lib/DefinePlugin');
 const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin');
+const nodeExternals             = require('webpack-node-externals');
+const UglifyJsPlugin            = require('uglifyjs-webpack-plugin');
 const fs                        = require('fs');
 const path                      = require('path')
 
-let version
+let version;
 try {
-  let pkg = JSON.parse(fs.readFileSync(path.resolve('package.json')))
+  let pkg = JSON.parse(fs.readFileSync(path.resolve('package.json'), 'utf-8'))
   version = pkg.version
 } catch (e) {
   version = '1.0.0'
@@ -41,6 +43,8 @@ module.exports = {
     extensions: [".webpack.js", ".web.js", ".js", '.jsx'],
   },
   
+  externals: [nodeExternals()],
+  
   module      : {
     rules: [
       {
@@ -59,7 +63,17 @@ module.exports = {
   },
   optimization: {
     minimize   : true,
-    splitChunks: {}
+    minimizer  : [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          output: {
+            comments: false,
+            beautify: false,
+          }
+        }
+      })
+    ],
+    // splitChunks: {}
   },
   plugins     : [
     new CleanWebpackPlugin(['dist']),
@@ -72,7 +86,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {context: 'src', from: 'assets/**/*'},
       {context: 'src', from: 'libs/**/*'},
-      {context: 'src', from: '*.yml'}
+      {context: 'src', from: '*.yml'},
     ], {
       ignore        : [
         // 'index.html',
@@ -88,9 +102,7 @@ module.exports = {
   
   node: {
     global        : false,
-    crypto        : 'empty',
     process       : false,
-    module        : 'empty',
     __dirname     : false,
     __filename    : false,
     clearImmediate: false,
