@@ -12,10 +12,10 @@ log4js:
       level: debug
 
 mysql:
-  host: "192.168.5.23"
-  user: root
-  password: "123456"
-  database: markingsystem
+  host: "47.94.151.34"
+  user: test
+  password: "test123456"
+  database: test
 
 #jwt secret key  二选一
 #secretKeyPath: /path/to/public.pub

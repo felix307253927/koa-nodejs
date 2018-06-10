@@ -7,21 +7,32 @@
 import {secretKey} from "../utils";
 import jwt from "jsonwebtoken";
 
-export default async (ctx) => {
+export async function login(ctx) {
   //查询数据库
-  const [results, fields] = await ctx.mysql.query('select name from test')
-  const user              = results[0]
-  return ctx.body = {
-    code : 0,
-    //设置token
-    token: jwt.sign({
-        id  : user.id,
-        name: user.name
-      },
-      secretKey, {
-        expiresIn: '2h'
-      }),
-    msg  : 'ok',
-    user
+  try {
+    const [results] = await ctx.db.query('select name from test')
+    const user = results[0]
+    ctx.body   = {
+      code : 0,
+      //设置token
+      token: jwt.sign({
+          id  : user.id,
+          name: user.name
+        },
+        secretKey, {
+          expiresIn: '2h'
+        }),
+      msg  : 'ok',
+      user
+    }
+  } catch (e) {
+    ctx.body = {
+      code: 1001,
+      msg : e.message
+    }
   }
+}
+
+export async function register(ctx) {
+  ctx.body = 'register success'
 }

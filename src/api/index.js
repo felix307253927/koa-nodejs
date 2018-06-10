@@ -5,4 +5,4 @@
 'use strict';
 
 
-export login from './login'
+export * from './login'
