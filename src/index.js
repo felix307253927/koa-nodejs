@@ -6,10 +6,9 @@
 import Koa from 'koa';
 import koaBody from 'koa-body';
 import serve from 'koa-static';
-import jwt from 'koa-jwt';
 import path from 'path';
-import {config, log4js, getLogger, getConnection, secretKey} from './utils';
-import {router, noAuth} from './routes';
+import {config, log4js, getLogger, getConnection} from './utils';
+import {router, noAuth} from './api';
 
 (async () => {
   const app = new Koa()
@@ -21,12 +20,6 @@ import {router, noAuth} from './routes';
     .use(serve(path.resolve(__dirname, './assets')))
     .use(koaBody())
     .use(noAuth.routes())
-    .use(jwt({
-      secret: secretKey,
-      getToken(ctx) {
-        return ctx.header.token || null
-      }
-    }))
     .use(router.routes())
     .use(router.allowedMethods())
     .listen(config.port)
