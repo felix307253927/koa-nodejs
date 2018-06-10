@@ -7,14 +7,14 @@ import Koa from 'koa';
 import koaBody from 'koa-body';
 import serve from 'koa-static';
 import path from 'path';
-import {config, log4js, getLogger, getConnection} from './utils';
+import {config, log4js, getLogger, createPool} from './utils';
 import {router, noAuth} from './api';
 
 (async () => {
   const app = new Koa()
   const log = getLogger('app')
   log.info('starting app...')
-  app.context.db = await getConnection();
+  app.context.db = await createPool();
   app
     .use(log4js.koaLogger(log4js.getLogger("http"), {level: 'auto'}))
     .use(serve(path.resolve(__dirname, './assets')))

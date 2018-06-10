@@ -8,8 +8,9 @@ import {getLogger} from "./log4js";
 import {config} from './config';
 import mysql from "mysql2/promise";
 
-export async function getConnection() {
-  const mysqlLog = getLogger('mysql')
+const mysqlLog = getLogger('mysql')
+
+export async function createConnection() {
   mysqlLog.info('connecting db...')
   try {
     return await mysql.createConnection(config.mysql)
@@ -17,4 +18,9 @@ export async function getConnection() {
     mysqlLog.error(e.message)
     process.exit(-1)
   }
+}
+
+export async function createPool() {
+  mysqlLog.info('connecting db using pool.')
+  return await mysql.createPool(config.mysql);
 }

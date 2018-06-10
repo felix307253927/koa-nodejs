@@ -16,6 +16,7 @@ mysql:
   user: test
   password: "test123456"
   database: test
+  connectionLimit: 50
 
 #jwt secret key  二选一
 #secretKeyPath: /path/to/public.pub

@@ -9,10 +9,12 @@ import jwt from "jsonwebtoken";
 
 export async function login(ctx) {
   //查询数据库
+  let db;
   try {
-    const [results] = await ctx.db.query('select name from test')
-    const user = results[0]
-    ctx.body   = {
+    db              = await ctx.db.getConnection()
+    const [results] = await db.query('select name from test')
+    const user      = results[0]
+    ctx.body        = {
       code : 0,
       //设置token
       token: jwt.sign({
@@ -30,6 +32,8 @@ export async function login(ctx) {
       code: 1001,
       msg : e.message
     }
+  } finally {
+    db && db.release()
   }
 }
 
