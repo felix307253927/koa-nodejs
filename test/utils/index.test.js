@@ -5,10 +5,9 @@
 'use strict';
 require('babel-register')
 require('chai/register-should')
-const {config} = require('../../src/utils')
 
-describe('#config', function () {
-  it('should load config file without error', ()=> {
-    config.port.should.be.a('number')
-  });
+let config = require('../../src/utils').config;
+
+test('should load config file without error', () => {
+  config.port.should.be.a('number')
 });
