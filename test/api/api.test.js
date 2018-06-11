@@ -6,28 +6,21 @@
 
 require('babel-register')
 require('chai/register-should')
-const Koa              = require('koa')
-const koaBody          = require('koa-body')
-const request          = require("supertest")
-const {createPool}     = require('../../src/utils')
-const {noAuth, router} = require('../../src/api')
+const createServe = require('../../src/server').default
+const supertest   = require("supertest")
 
-let app, ajax;
+let app, request;
 beforeAll(async () => {
-  app            = new Koa()
-  app.context.db = await createPool()
-  app.use(koaBody())
-    .use(noAuth.routes())
-    .use(noAuth.routes())
-    .use(router.allowedMethods())
-  ajax = request(app.callback())
+  app     = await createServe()
+  request = supertest(app.callback())
 })
-afterAll(()=>{
-  app.context.db.end()
+
+afterAll(() => {
+  app && app.context.db.end()
 })
 
 test('login', async () => {
-  const {body, status, type} = await ajax//request(app.callback())
+  const {body, status, type} = await request//request(app.callback())
     .post('/login')
     .send({
       username: 'test',

@@ -6,7 +6,8 @@
     "start": "ENV=development babel-node src/index.js",
     "build": "webpack --config webpack.prod.js",
     "postbuild": "node post-build.js",
-    "test": "ENV=development jest --detectOpenHandles"
+    "test": "ENV=development jest --detectOpenHandles",
+    "coverage": "ENV=development jest --coverage"
   },
   "jest": {
     "testEnvironment": "node"

@@ -13,7 +13,7 @@ const map = new Map()
 
 export const log4js = koaLog4
 
-export function getLogger(name = 'app') {
+export function getLogger(name = 'server') {
   if (map.has(name)) {
     return map.get(name)
   } else {

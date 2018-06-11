@@ -22,5 +22,10 @@ export async function createConnection() {
 
 export async function createPool() {
   mysqlLog.info('connecting db using pool.')
-  return await mysql.createPool(config.mysql);
+  try {
+    return await mysql.createPool(config.mysql);
+  } catch (e) {
+    mysqlLog.error(e.message)
+    process.exit(-1)
+  }
 }
