@@ -4,12 +4,12 @@
  */
 'use strict';
 import {config, getLogger} from './utils';
-import createServe from './server';
+import Server from './server';
 
 const log = getLogger()
 log.info('starting server...')
 
-createServe().then(app => {
-  app.listen(config.port)
-  log.info('server is run at:', config.port)
-})
+const app = new Server()
+
+app.listen(config.port)
+log.info('server is run at:', config.port)

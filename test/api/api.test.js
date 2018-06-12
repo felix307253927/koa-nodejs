@@ -6,12 +6,12 @@
 
 require('babel-register')
 require('chai/register-should')
-const createServe = require('../../src/server').default
-const supertest   = require("supertest")
+const Server    = require('../../src/server').default
+const supertest = require("supertest")
 
 let app, request;
-beforeAll(async () => {
-  app     = await createServe()
+beforeAll(() => {
+  app     = new Server()
   request = supertest(app.callback())
 })
 
@@ -34,6 +34,5 @@ test('login', async () => {
   const res = await request.post('/post')
     .set('token', body.token)
     .send({arg1: 'test'})
-  res.status.should.be(200)
-  res.body.code.should.be(0)
+  res.status.should.equal(200)
 })
