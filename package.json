@@ -8,7 +8,7 @@
     "postbuild": "node post-build.js",
     "pm2": "pm2 start ecosystem.config.js",
     "test": "ENV=development jest",
-    "test-watch":"ENV=development jest --watch",
+    "test-watch": "ENV=development jest --watch",
     "coverage": "ENV=development jest --coverage"
   },
   "jest": {
@@ -39,6 +39,7 @@
     "babel-loader": "^7.1.4",
     "babel-plugin-syntax-class-properties": "^6.13.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
