@@ -6,26 +6,31 @@
 
 import {secretKey} from "../utils";
 import jwt from "jsonwebtoken";
+// ctx.request.query  获取get请求参数
+// ctx.request.body   获取post请求参数
+// ctx.state.user     获取token 信息
 
 export async function login(ctx) {
-  //查询数据库
+  // 查询数据库
   let db;
   try {
-    db              = await ctx.db.getConnection()
-    const [results] = await db.query('select name from test')
-    const user      = results[0]
-    ctx.body        = {
-      code : 0,
+    db             = await ctx.db.getConnection()
+    const [[user]] = await db.query('select * from test')
+    // const user      = results[0]
+    ctx.body       = {
+      code  : 0,
       //设置token
-      token: jwt.sign({
+      token : jwt.sign({
           id  : user.id,
           name: user.name
         },
         secretKey, {
           expiresIn: '2h'
         }),
-      msg  : 'ok',
-      user
+      msg   : 'ok',
+      user,
+      jwt   : ctx.state.user,
+      params: ctx.request.body
     }
   } catch (e) {
     ctx.body = {

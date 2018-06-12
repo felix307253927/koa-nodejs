@@ -22,7 +22,10 @@ router
     }
   }))
   .post('/post', (ctx) => {
-    ctx.body = ctx.request.body
+    ctx.body = {
+      ...ctx.request.body,
+      jwt: ctx.state.user
+    }
   })
   .get('/test', (ctx) => {
     ctx.body = 'test jwt'
